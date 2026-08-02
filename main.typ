@@ -3,6 +3,9 @@
 #import "@preview/great-theorems:0.1.2": *
 #import "@preview/rich-counters:0.2.1": *
 
+// for commutative diagrams.
+#import "@preview/fletcher:0.5.8" as fletcher: diagram, node, edge
+
 #let date = datetime.today().display("[month repr:long] [day], [year]")
 
 // Modify some arguments, which can be overwritten in the template call
@@ -69,6 +72,8 @@
   set text(fill: color.fuchsia)
   x
 } 
+
+#let interval = $[0,1]$
 
 #outline()
 
@@ -260,7 +265,7 @@ The following trinity of results forms a good set of tools for proving connectiv
 === Path connectivity:
 
 #definition(title: "Path connected space")[
-  We say that a topological space $X$ is path connected if for every pair of points $x,y in X$ there exists a continuous map $gamma : [0,1] -> X$, such that $gamma(0) = x$ and $gamma(1) = y$. We say that $gamma$ is a path from $x$ to $y$.
+  We say that a topological space $X$ is path connected if for every pair of points $x,y in X$ there exists a continuous map $gamma : [0,1] -> X$, such that $gamma (0) = x$ and $gamma (1) = y$. We say that $gamma$ is a path from $x$ to $y$.
 ]
 
 #theorem[Every Path connected space is connected.]
@@ -948,24 +953,27 @@ Homeomorphism is a nice concept while working with continuous maps, homotopy is 
 
 #definition(title: "Deformation retraction")[
   A *retraction* is a map $r : X -> X$ such that $r^2 = r$. 
-  That is, $r$ projects the whole space onto some subspace $"im"(r)$.
+  That is, $r$ projects the whole space onto some subspace $"im"(r)$, this image is then called a retract of the space $X$.
 
-  A *deformation retraction* is a homotopy from the identity map on a space to a retraction. Intuitively, it captures the idea of continuously deformiing a space into a subspace of itself.
+  A *deformation retraction* is a homotopy from the identity map on a space to a retraction. Intuitively, it captures the idea of continuously deforming a space into a subspace of itself.
 ]
 
 #example(title: "Not all retractions can be results of deformation retractions")[
 
-  If we take $X$ to a space that is not path connected, we can find $y,x in X$ such that there is no continuous map $gamma : [0,1] -> X$ that has $gamma(0) = y, gamma(1) = x$.
+  If we take $X$ to a space that is not path connected, we can find $y,x in X$ such that there is no continuous map $gamma : [0,1] -> X$ that has $gamma (0) = y, gamma (1) = x$.
 
   We can consider the retraction $r(X) = {x}$.
 
-  If there is a homotopy ${f_t}_t$ from the identity map to $r$. We can consider the following map $gamma(t) = f_t (y)$. This is then a continuous map that gives up a path from $y$ to $x$. This contradicts that $y,x$ have no path between them. So no homotopy can exist between the identity and the constant map in a non-path connected space.
+  If there is a homotopy ${f_t}_t$ from the identity map to $r$. We can consider the following map $gamma (t) = f_t (y)$. This is then a continuous map that gives up a path from $y$ to $x$. This contradicts that $y,x$ have no path between them. So no homotopy can exist between the identity and the constant map in a non-path connected space.
 ]
 
 We can now consider a construction that is pretty useful.
 #definition(title: "Mapping Cylinder")[
   Let $f : X -> Y$ be a continuous function. Then define $M_f$ to be a quotient space on the disjoint union space $(X times [0,1]) union.sq Y$  where we make the identification $(x,1) ~ f(x)$. This is called the *mapping cylinder* of $f$.
 ]
+
+The intuition behind the mapping cylinder is that we create a space that as we move along $[0,1]$, continuously transforms the space $X$ into $f(X)$, and then glues it to $Y$.
+
 
 #definition(title:"Homotopy relative to subspaces")[
   Given a homotopy ${f_t : X -> Y }_t$ and a subspace $A subset.eq X$ we say that $f$ is a *homotopy relative* to $A$ if for every $t$ $f_t$ restricted to $A$ is the same map.
@@ -991,4 +999,51 @@ We can now consider a construction that is pretty useful.
   #ms[This is a weird example to take notes about.]
 ]
 
+=== Cell complexes: Revisited
+
+In this section, I want to build up the notion of cell complexes and iteratively defined spaces in a slightly more general way. The main definition revolves around CW-complexes but I will also merge ideas from Hatcher's 'Algebraic Topology' and R. Brown's 'Topology and groupoids.'
+
+
+#lemma[The closure of open cells in a CW-complex are the closed cells.]
+
+#theorem[A CW-complex is compact iff. it is finite.]
+
+
+=== Homotopy Extension Property:
+
+#definition(title:"Homotopy extension property")[
+  Let $f_0 : X -> Y$ be a map and $f_t : A -> Y$ be a homotopy to $f_0|_A$ for a subspace $A subset X$.
+
+  If this $(X,A)$ is a pair such that any homotopy of this form on $A$ can always be extended to a homotopy $f_t : X -> Y$, then we say $(X,A)$ has the *homotopy extension property*.
+
+  Therefore, we say that $(X,A)$ has the homotopy extension property if every pair of maps $X times {0} -> Y$ and $A times [0,1] -> Y$ that agree on $A times {0}$ can be extended to a map on $X times [0,1] -> Y$.
+]
+// https://q.uiver.app/#r=typst&q=WzAsNSxbMCwwLCJBIHRpbWVzIHswfSJdLFswLDIsIlggdGltZXMgezB9Il0sWzIsMCwiQSB0aW1lcyBbMCwxXSJdLFsyLDIsIlkiXSxbMSwxLCJYIHRpbWVzIFswLDFdIl0sWzAsMSwiaW90YSIsMl0sWzAsMiwiaW90YSJdLFsxLDMsImZfMCIsMl0sWzIsMywiZl90Il0sWzQsMywiZXhpc3RzIGYiLDIseyJzdHlsZSI6eyJib2R5Ijp7Im5hbWUiOiJkYXNoZWQifX19XSxbMiw0LCJpb3RhIiwyXSxbMSw0LCJpb3RhIiwxXV0=
+#align(center, diagram({
+	node((1, 4), [$A times {0}$])
+	node((1, 6), [$X times {0}$])
+	node((3, 4), [$A times [0,1]$])
+	node((3, 6), [$Y$])
+	node((2, 5), [$X times [0,1]$])
+	edge((1, 4), (1, 6), [$iota$], label-side: right, "->")
+	edge((1, 4), (3, 4), [$iota$], label-side: left, "->")
+	edge((1, 6), (3, 6), [$f_0$], label-side: right, "->")
+	edge((3, 4), (3, 6), [$f_t$], label-side: left, "->")
+	edge((2, 5), (3, 6), [$exists f$], label-side: right, "-->")
+	edge((3, 4), (2, 5), [$iota$], label-side: right, "->")
+	edge((1, 6), (2, 5), [$iota$], label-side: center, "->")
+}))
+
+This can be illustrated in this commutative diagram. Where the non-dotted lines commuting implies the existence of $f$ which makes this diagram commute.
+
+#lemma[A pair $(X,A)$ has homotopy extension property if and only if $(X times {0}) union (A times [0,1])$ is a retract of $X times [0,1]$.]
+
+#proof[
+
+($arrow.double$):
+  Let $(X,A)$ have the homotopy extension property. Let $Y = (X times {0}) union (A times interval)$ and let $f_0$ be the identity map $(X times {0}) union (A times interval) -> (X times {0}) union (A times interval)$. This then extends to a homotopy $f_t : X times interval -> (X times {0}) union (A times interval)$. This is precisely a retraction map, as it extends the identity on the retract so it fixes it.
+
+($arrow.double.l$): Let $(X times {0}) union (A times interval)$ be a retract of $X times interval$.
+#ms[TODO]
+]
 
