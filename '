@@ -1076,10 +1076,6 @@ Then $X$ is compact Hausdorff iff. $tl(X)$ is compact Hausdorff.
 
   Let $z in p^(-1)(O_1)$, we know that $p[V_i inter U_1] subset.eq U_x$, so $p(z) in U_x$. As the preimage of $U_x$ is a disjoint union of slices, there exists a slice, $V_j$, such that $z in V_j$.  
   
-  As $V_j$ is a slice, $p|_(V_j)$ is a homeomorphism to $U_x$. Then as $p|_(V_j) (z) in p|_(V_j)[V_j inter U]$, we have that $z in V_j inter U_1$. This means that $z in U_1$. As $z$ was arbitrary in $p^(-1)(O_1)$, $p^(-1)(O_1) subset.eq U_1$.
-
-  By symmetry $p^(-1)(O_2) subset.eq U_2$. As the values that map into $O_1$ and $O_2$ are entirely disjoint, $O_1$ and $O_2$ must be disjoint. This gives us that $X$ is Hausdorff.
-
-  ($arrow.double.r$): Let $X$ be compact Hausdorff.
+  then $p$
 ]
 
